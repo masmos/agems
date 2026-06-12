@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
+import { AlertCircle, BookOpen, Clock, FileWarning, FolderGit2, Gauge, LayoutGrid, LocateIcon, MapPin, TriangleAlert } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -21,6 +21,31 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Alerts',
+        icon: TriangleAlert,
+        href: '/enviromental/alerts'
+    },
+    {
+        title: 'Stations',
+        icon: MapPin,
+        href: '/core/stations'
+    },
+    {
+        title: 'Thresholds',
+        icon: Gauge,
+        href: '/core/thresholds'
+    },
+    {
+        title: 'Telemetry Readings',
+        icon: Clock,
+        href: '/enviromental/telemetry'
+    },
+    {
+        title: 'Pipeline Projects',
+        icon: FileWarning,
+        href: '/project/pipeline'
     },
 ];
 
