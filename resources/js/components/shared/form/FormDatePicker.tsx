@@ -105,7 +105,7 @@ export function FormDatePicker<T>({
                         selected={selectedDate}
                         onSelect={handleDateSelect}
                         disabled={isDateDisabled}
-                        initialFocus
+                      //  initialFocus
                         className="rounded-md border"
                     />
                 </PopoverContent>
