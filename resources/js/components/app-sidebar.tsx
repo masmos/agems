@@ -25,7 +25,7 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Alerts',
         icon: TriangleAlert,
-        href: '/enviromental/alerts'
+        href: '/alerts'
     },
     {
         title: 'Stations',
