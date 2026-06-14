@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use Database\Seeders\ThresholdsTableSeeder;
+use Database\Seeders\UsersTableSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,11 +16,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+/*         User::factory()->create([
+            'name' => 'Moses Masaba',
+            'email' => 'mmasaba085@gmail.com',
+            'password' => bcrypt('password'),
+        ]); */
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            UsersTableSeeder::class,
+            ThresholdsTableSeeder::class
         ]);
     }
 }
