@@ -24,7 +24,9 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UsersTableSeeder::class,
-            ThresholdsTableSeeder::class
+            ThresholdsTableSeeder::class,
+            DemoDataSeeder::class,
+            RolesTableSeeder::class,
         ]);
     }
 }
