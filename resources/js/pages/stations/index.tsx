@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { MagnifyingGlassCircleIcon } from '@heroicons/react/24/outline';
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
+import { PlusIcon, MapPin, Activity, Circle } from 'lucide-react';
+import React, { useState } from 'react';
 import Heading from '@/components/heading';
 import EmptyState from '@/components/shared/EmptyState';
-import { PlusIcon, MapPin, Activity, Circle } from 'lucide-react';
+import AppLayout from '@/layouts/app-layout';
 import type { MonitoringStation, PaginatedResponse } from '@/types';
-import { MagnifyingGlassCircleIcon } from '@heroicons/react/24/outline';
 
 interface StationsIndexProps {
   stations: PaginatedResponse<MonitoringStation>;

@@ -1,7 +1,7 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { dashboard, login, register } from '@/routes';
 import { AlertTriangle, MapPin, Satellite, ChartLine, Map, ClipboardList, Bell, Shield, Leaf, LayoutDashboard } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { dashboard, login, register } from '@/routes';
 
 interface FeatureCardProps {
     icon: React.ReactNode;

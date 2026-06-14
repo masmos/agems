@@ -1,25 +1,19 @@
 "use client"
 
-import {
+import type {
     ColumnDef,
     ColumnFiltersState,
+    PaginationState} from "@tanstack/react-table";
+import {
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
-    useReactTable,
-    PaginationState,
+    useReactTable
 } from "@tanstack/react-table"
+import { Search } from "lucide-react"
 import { useState, useMemo, useEffect } from "react"
 
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
 import {
     Select,
@@ -28,9 +22,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { DataTablePagination } from "./DataTablePagination"
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
 import { cn } from "@/lib/utils"
-import { Search } from "lucide-react"
+import { DataTablePagination } from "./DataTablePagination"
 
 export interface FilterableColumn {
     id: string

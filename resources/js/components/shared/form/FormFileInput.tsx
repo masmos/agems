@@ -1,17 +1,17 @@
 'use client';
 
-import { useRef, useState } from 'react';
 import {
     Upload,
     X,
     CheckCircle2,
     AlertCircle,
 } from 'lucide-react';
+import { useRef, useState } from 'react';
 
-import { FormField } from './FormField';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
+import { FormField } from './FormField';
 
 interface FileWithProgress {
     file: File;
@@ -78,7 +78,9 @@ export function FormFileInput({
                 )
         );
 
-        if (!uniqueFiles.length) return;
+        if (!uniqueFiles.length) {
+return;
+}
 
         const mappedFiles: FileWithProgress[] =
             uniqueFiles.map((file) => ({
@@ -142,7 +144,9 @@ export function FormFileInput({
     const handleFiles = (
         fileList: FileList | null
     ) => {
-        if (!fileList) return;
+        if (!fileList) {
+return;
+}
 
         const selectedFiles = Array.from(fileList);
 

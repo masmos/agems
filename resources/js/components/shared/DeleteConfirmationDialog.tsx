@@ -1,6 +1,7 @@
 "use client";
 
 import { Loader } from "lucide-react";
+import type { ReactNode } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,7 +13,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ReactNode } from "react";
 
 interface DeleteConfirmationDialogProps {
   trigger: ReactNode;

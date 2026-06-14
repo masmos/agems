@@ -1,17 +1,5 @@
 import { Head, usePage, router } from '@inertiajs/react';
 import { dashboard } from '@/routes';
-import { useState, useEffect } from 'react';
-import { 
-  AlertTriangle, 
-  MapPin, 
-  Bell,
-  Circle,
-  Wind,
-  Activity,
-  CheckCircle,
-  XCircle,
-  AlertCircle
-} from 'lucide-react';
 import {
   LineChart,
   Line,
@@ -27,6 +15,18 @@ import {
 } from 'recharts';
 import { MapContainer, TileLayer, Marker, Popup, Circle as LeafletCircle, useMap } from 'react-leaflet';
 import L from 'leaflet';
+import { 
+  AlertTriangle, 
+  MapPin, 
+  Bell,
+  Circle,
+  Wind,
+  Activity,
+  CheckCircle,
+  XCircle,
+  AlertCircle
+} from 'lucide-react';
+import { useState, useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
 import toast from 'react-hot-toast';
 
@@ -156,6 +156,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
       </div>
     );
   }
+
   return null;
 };
 
@@ -284,6 +285,7 @@ const MapController = ({ center, zoom }: { center: [number, number]; zoom: numbe
   useEffect(() => {
     map.setView(center, zoom);
   }, [center, zoom, map]);
+
   return null;
 };
 
@@ -311,6 +313,7 @@ const StationStatusMap = ({ stations }: { stations?: Station[] }) => {
 
   const getStatusIcon = (status: Station['status']) => {
     const color = status === 'healthy' ? 'green' : status === 'warning' ? 'yellow' : 'red';
+
     return L.icon({
       iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
       iconRetinaUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
@@ -575,6 +578,7 @@ export default function Dashboard({
 
     fetchRealtimeData();
     const interval = setInterval(fetchRealtimeData, 30000);
+
     return () => clearInterval(interval);
   }, []);
   
@@ -613,10 +617,22 @@ export default function Dashboard({
   
   // Calculate AQI status for display
   const getAQIStatus = (aqi: number) => {
-    if (aqi <= 50) return { text: 'Good', color: 'text-green-600' };
-    if (aqi <= 100) return { text: 'Moderate', color: 'text-yellow-600' };
-    if (aqi <= 150) return { text: 'Unhealthy for Sensitive Groups', color: 'text-orange-600' };
-    if (aqi <= 200) return { text: 'Unhealthy', color: 'text-red-600' };
+    if (aqi <= 50) {
+return { text: 'Good', color: 'text-green-600' };
+}
+
+    if (aqi <= 100) {
+return { text: 'Moderate', color: 'text-yellow-600' };
+}
+
+    if (aqi <= 150) {
+return { text: 'Unhealthy for Sensitive Groups', color: 'text-orange-600' };
+}
+
+    if (aqi <= 200) {
+return { text: 'Unhealthy', color: 'text-red-600' };
+}
+
     return { text: 'Very Unhealthy', color: 'text-purple-600' };
   };
   

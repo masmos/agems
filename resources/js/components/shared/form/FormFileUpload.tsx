@@ -23,7 +23,10 @@ export function FormFileUpload({ form, name, label, required }: Props) {
                 type="file"
                 onChange={(e) => {
                     const file = e.target.files?.[0];
-                    if (file) form.setData(name, file);
+
+                    if (file) {
+form.setData(name, file);
+}
                 }}
                 className={form.errors[name] ? 'border-destructive' : ''}
             />

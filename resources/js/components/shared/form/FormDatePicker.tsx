@@ -1,13 +1,13 @@
 'use client';
 
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar as UiCalendar } from "@/components/ui/calendar";
-import { Calendar, X } from "lucide-react";
-import { FormField } from "./FormField";
-import React from "react";
 import { format } from "date-fns";
+import { Calendar, X } from "lucide-react";
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Calendar as UiCalendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { FormField } from "./FormField";
 
 interface Props<T = any> {
     form: {
@@ -57,8 +57,14 @@ export function FormDatePicker<T>({
 
     // Determine if a date should be disabled
     const isDateDisabled = (date: Date) => {
-        if (minDate && date < minDate) return true;
-        if (maxDate && date > maxDate) return true;
+        if (minDate && date < minDate) {
+return true;
+}
+
+        if (maxDate && date > maxDate) {
+return true;
+}
+
         return false;
     };
 

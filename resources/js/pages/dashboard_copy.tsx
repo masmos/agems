@@ -1,5 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import {
+  BellIcon,
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+  XCircleIcon,
+  SignalIcon,
+  FireIcon,
+  ChartBarIcon
+} from '@heroicons/react/24/outline';
 import { Head, Link } from '@inertiajs/react';
+import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import {
   LineChart,
   Line,
@@ -15,16 +25,6 @@ import {
   Pie,
   Cell
 } from 'recharts';
-import {
-  BellIcon,
-  CheckCircleIcon,
-  ExclamationTriangleIcon,
-  XCircleIcon,
-  SignalIcon,
-  FireIcon,
-  ChartBarIcon
-} from '@heroicons/react/24/outline';
-import toast from 'react-hot-toast';
 import type {
   DashboardStats,
   Alert,
@@ -175,6 +175,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     };
 
     const interval = setInterval(fetchRealtimeData, 30000);
+
     return () => clearInterval(interval);
   }, []);
 

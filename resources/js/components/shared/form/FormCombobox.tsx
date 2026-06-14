@@ -1,5 +1,6 @@
 'use client';
 
+import { useId } from 'react';
 import {
     Combobox,
     ComboboxContent,
@@ -8,9 +9,8 @@ import {
     ComboboxItem,
     ComboboxList,
 } from "@/components/ui/combobox";
-import { FormField } from "./FormField";
-import { useId } from 'react';
 import { cn } from "@/lib/utils";
+import { FormField } from "./FormField";
 
 interface Option {
     label: string;
@@ -52,6 +52,7 @@ export function FormCombobox<T>({
     const handleValueChange = (value: string | null) => {
         if (value === null) {
             form.setData(name, null);
+
             return;
         }
         
@@ -86,6 +87,7 @@ export function FormCombobox<T>({
                     <ComboboxList>
                         {(item: string) => {
                             const option = options.find(opt => String(opt.value) === item);
+
                             return (
                                 <ComboboxItem key={item} value={item}>
                                     {option?.label || item}

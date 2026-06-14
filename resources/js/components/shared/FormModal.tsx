@@ -1,6 +1,11 @@
 'use client';
 
+import type { Page, PageProps as InertiaPageProps } from '@inertiajs/core';
+import { useForm } from '@inertiajs/react';
+import { Loader, X } from 'lucide-react';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogContent,
@@ -9,11 +14,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { Page, PageProps as InertiaPageProps } from '@inertiajs/core';
-import { Button } from '@/components/ui/button';
-import { Loader, X } from 'lucide-react';
-import { useForm } from '@inertiajs/react';
-import { toast } from 'sonner';
 
 type Method = 'post' | 'patch' | 'put' | 'delete';
 
@@ -100,11 +100,16 @@ export default function FormModal<T extends Record<string, any>>({
 
     useEffect(() => {
         isMounted.current = true;
-        return () => { isMounted.current = false; };
+
+        return () => {
+ isMounted.current = false; 
+};
     }, []);
 
     const handleOpenChange = useCallback((open: boolean) => {
-        if (!open && form.processing) return;
+        if (!open && form.processing) {
+return;
+}
 
         if (isControlled) {
             externalOnOpenChange?.(open);
@@ -120,16 +125,19 @@ export default function FormModal<T extends Record<string, any>>({
     const showFlashToast = useCallback((flash?: FlashMessage) => {
         if (flash?.error) {
             toast.error(flash.error);
+
             return;
         }
 
         if (flash?.warning) {
             toast.warning(flash.warning);
+
             return;
         }
 
         if (flash?.success) {
             toast.success(flash.success);
+
             return;
         }
 
@@ -143,6 +151,7 @@ export default function FormModal<T extends Record<string, any>>({
 
         if (!validMethods.includes(method)) {
             toast.error('Invalid submission method');
+
             return;
         }
 
@@ -150,6 +159,7 @@ export default function FormModal<T extends Record<string, any>>({
 
         if (!submitMethod || typeof submitMethod !== 'function') {
             toast.error('Form submission error');
+
             return;
         }
 
@@ -162,7 +172,9 @@ export default function FormModal<T extends Record<string, any>>({
                 // Flash toasts should still fire even if this modal unmounts during the Inertia refresh.
                 showFlashToast(flash);
 
-                if (!isMounted.current) return;
+                if (!isMounted.current) {
+return;
+}
 
                 if (shouldCloseModal) {
                     handleOpenChange(false);
@@ -178,7 +190,9 @@ export default function FormModal<T extends Record<string, any>>({
                     toast.error('Something went wrong.');
                 }
 
-                if (!isMounted.current) return;
+                if (!isMounted.current) {
+return;
+}
 
                 onError?.(errors);
             },
