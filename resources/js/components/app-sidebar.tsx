@@ -30,17 +30,17 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Stations',
         icon: MapPin,
-        href: '/core/stations'
+        href: '/stations'
     },
     {
         title: 'Thresholds',
         icon: Gauge,
-        href: '/core/thresholds'
+        href: '/thresholds'
     },
     {
         title: 'Telemetry Readings',
         icon: Clock,
-        href: '/enviromental/telemetry'
+        href: '/telemetry'
     },
     {
         title: 'Pipeline Projects',
