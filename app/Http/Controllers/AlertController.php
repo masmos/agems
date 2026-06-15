@@ -31,7 +31,7 @@ class AlertController extends Controller
         }
         
         $alerts = $query->orderBy('created_at', 'desc')
-                        ->paginate($request->get('per_page', 20));
+                        ->paginate($request->get('per_page', 10000000));
         
         $stats = [
             'total' => Alert::count(),
