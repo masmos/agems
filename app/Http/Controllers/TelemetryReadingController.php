@@ -44,24 +44,33 @@ class TelemetryReadingController extends Controller
     public function show(TelemetryReading $telemetryReading)
     {
         $telemetryReading->load('monitoringStation');
-        
+
+        if (empty($telemetryReading->reading_datetime)) {
+            return Inertia::render('telemetry/show', [
+                'reading' => $telemetryReading,
+                'previous' => null,
+                'next' => null,
+            ]);
+        }
+
         // Get previous and next readings
         $previous = TelemetryReading::where('monitoring_station_id', $telemetryReading->monitoring_station_id)
             ->where('reading_datetime', '<', $telemetryReading->reading_datetime)
             ->orderBy('reading_datetime', 'desc')
             ->first();
-        
+
         $next = TelemetryReading::where('monitoring_station_id', $telemetryReading->monitoring_station_id)
             ->where('reading_datetime', '>', $telemetryReading->reading_datetime)
             ->orderBy('reading_datetime', 'asc')
             ->first();
-        
+
         return Inertia::render('telemetry/show', [
             'reading' => $telemetryReading,
             'previous' => $previous,
             'next' => $next,
         ]);
     }
+
     
     public function store(Request $request)
     {

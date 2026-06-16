@@ -78,7 +78,8 @@ const TelemetryShow: React.FC<TelemetryShowProps> = ({ reading, previous, next }
                         <div>
                             <Heading
                                 title="Telemetry Reading Details"
-                                description={`Recorded at ${reading.monitoring_station.station_name}`}
+                                description={`Recorded at ${reading.monitoring_station?.station_name || 'Unknown'}`}
+
                             />
                         </div>
                     </div>
@@ -176,10 +177,11 @@ const TelemetryShow: React.FC<TelemetryShowProps> = ({ reading, previous, next }
                                         href={`/stations/${reading.monitoring_station_id}`}
                                         className="text-sm text-primary hover:underline"
                                     >
-                                        {reading.monitoring_station.station_name}
+                                        {reading.monitoring_station?.station_name || 'Unknown'}
                                     </Link>
                                 </div>
                             </div>
+
                             <div className="flex items-center gap-3">
                                 <AlertTriangle className="h-4 w-4 text-muted-foreground" />
                                 <div>
