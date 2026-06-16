@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { AlertCircle, BookOpen, Clock, FileWarning, Flame, FolderGit2, Gauge, LayoutGrid, LocateIcon, MapPin, TriangleAlert } from 'lucide-react';
+import { AlertCircle, BookOpen, Clock, FileWarning, Flame, FolderGit2, Gauge, LayoutGrid, LocateIcon, MapPin, Shield, TriangleAlert, Users } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -51,6 +51,16 @@ const mainNavItems: NavItem[] = [
         icon: FileWarning,
         href: '/project/pipeline'
     },
+    {
+        title: 'Roles & Permissions',
+        icon: Shield,
+        href: '/roles'
+    },
+    {
+        title: 'User Management',
+        href: '/users',
+        icon: Users,
+    }
 ];
 
 const footerNavItems: NavItem[] = [

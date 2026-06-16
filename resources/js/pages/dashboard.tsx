@@ -15,9 +15,9 @@ import {
 } from 'recharts';
 import { MapContainer, TileLayer, Marker, Popup, Circle as LeafletCircle, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { 
-  AlertTriangle, 
-  MapPin, 
+import {
+  AlertTriangle,
+  MapPin,
   Bell,
   Circle,
   Wind,
@@ -100,17 +100,17 @@ interface DashboardProps {
 }
 
 // ========== Metric Card Component ==========
-const MetricCard = ({ 
-  title, 
-  value, 
-  subtitle, 
+const MetricCard = ({
+  title,
+  value,
+  subtitle,
   icon,
   trend,
   trendValue
-}: { 
-  title: string; 
-  value: string | number; 
-  subtitle?: string; 
+}: {
+  title: string;
+  value: string | number;
+  subtitle?: string;
   icon: React.ReactNode;
   trend?: 'up' | 'down' | 'stable';
   trendValue?: string;
@@ -169,35 +169,35 @@ const AQITrendChart = ({ data }: { data: AQIDataPoint[] }) => {
           data={data}
           margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
         >
-          <CartesianGrid 
-            strokeDasharray="3 3" 
-            stroke="#e5e7eb" 
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="#e5e7eb"
             strokeOpacity={0.5}
             vertical={false}
           />
-          <XAxis 
-            dataKey="hour" 
+          <XAxis
+            dataKey="hour"
             tick={{ fontSize: 10, fill: '#6b7280' }}
             tickLine={false}
             axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
             domain={[0, 23]}
           />
-          <YAxis 
+          <YAxis
             tick={{ fontSize: 10, fill: '#6b7280' }}
             tickLine={false}
             axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
           />
           <Tooltip content={<CustomTooltip />} />
-          <ReferenceLine 
-            y={50} 
-            stroke="#eab308" 
+          <ReferenceLine
+            y={50}
+            stroke="#eab308"
             strokeDasharray="4 4"
             strokeWidth={1.5}
             label={{ value: 'Warning Threshold', position: 'right', fontSize: 10 }}
           />
-          <ReferenceLine 
-            y={100} 
-            stroke="#ef4444" 
+          <ReferenceLine
+            y={100}
+            stroke="#ef4444"
             strokeDasharray="4 4"
             strokeWidth={1.5}
             label={{ value: 'Critical Threshold', position: 'right', fontSize: 10 }}
@@ -234,19 +234,19 @@ const EmissionTrendChart = ({ data }: { data: EmissionDataPoint[] }) => {
           data={data}
           margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
         >
-          <CartesianGrid 
-            strokeDasharray="3 3" 
-            stroke="#e5e7eb" 
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="#e5e7eb"
             strokeOpacity={0.5}
             vertical={false}
           />
-          <XAxis 
-            dataKey="hour" 
+          <XAxis
+            dataKey="hour"
             tick={{ fontSize: 10, fill: '#6b7280' }}
             tickLine={false}
             axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
           />
-          <YAxis 
+          <YAxis
             tick={{ fontSize: 10, fill: '#6b7280' }}
             tickLine={false}
             axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
@@ -344,7 +344,7 @@ const StationStatusMap = ({ stations }: { stations?: Station[] }) => {
           </div>
         </div>
       </div>
-      
+
       <div className="relative w-full overflow-hidden rounded-b-lg" style={{ height: '400px' }}>
         <MapContainer
           center={mapCenter}
@@ -354,12 +354,12 @@ const StationStatusMap = ({ stations }: { stations?: Station[] }) => {
           scrollWheelZoom={true}
         >
           <MapController center={mapCenter} zoom={mapZoom} />
-          
+
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          
+
           {stations.map((station) => (
             <div key={station.id}>
               <Marker
@@ -372,20 +372,18 @@ const StationStatusMap = ({ stations }: { stations?: Station[] }) => {
                     <div className="mt-2 space-y-1 text-xs">
                       <div className="flex justify-between">
                         <span className="text-gray-500">Status:</span>
-                        <span className={`font-medium ${
-                          station.status === 'healthy' ? 'text-green-600' :
-                          station.status === 'warning' ? 'text-yellow-600' : 'text-red-600'
-                        }`}>
+                        <span className={`font-medium ${station.status === 'healthy' ? 'text-green-600' :
+                            station.status === 'warning' ? 'text-yellow-600' : 'text-red-600'
+                          }`}>
                           {station.status === 'healthy' ? 'Healthy' :
-                           station.status === 'warning' ? 'Warning' : 'Critical'}
+                            station.status === 'warning' ? 'Warning' : 'Critical'}
                         </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-500">AQI:</span>
-                        <span className={`font-medium ${
-                          station.aqi <= 50 ? 'text-green-600' :
-                          station.aqi <= 100 ? 'text-yellow-600' : 'text-red-600'
-                        }`}>
+                        <span className={`font-medium ${station.aqi <= 50 ? 'text-green-600' :
+                            station.aqi <= 100 ? 'text-yellow-600' : 'text-red-600'
+                          }`}>
                           {station.aqi}
                         </span>
                       </div>
@@ -397,7 +395,7 @@ const StationStatusMap = ({ stations }: { stations?: Station[] }) => {
                   </div>
                 </Popup>
               </Marker>
-              
+
               <LeafletCircle
                 center={[station.lat, station.lng]}
                 radius={station.status === 'critical' ? 5000 : station.status === 'warning' ? 3000 : 2000}
@@ -446,7 +444,7 @@ const LiveAlertFeed = ({ alerts, onAcknowledge }: { alerts: Alert[]; onAcknowled
             </span>
           </div>
           {alerts.length > 3 && (
-            <button 
+            <button
               onClick={() => router.visit('/alerts')}
               className="text-xs text-indigo-600 hover:text-indigo-700 dark:text-indigo-400"
             >
@@ -550,18 +548,18 @@ const defaultStats: DashboardStats = {
   compliance_rate: 0,
 };
 
-export default function Dashboard({ 
-  stats: initialStats, 
+export default function Dashboard({
+  stats: initialStats,
   recentAlerts: initialAlerts,
   alertsBySeverity,
   airQualityTrends,
   emissionTrends,
-  stations: initialStations = [] 
+  stations: initialStations = []
 }: DashboardProps) {
   const [stats, setStats] = useState<DashboardStats>(initialStats ?? defaultStats);
   const [recentAlerts, setRecentAlerts] = useState(initialAlerts ?? []);
   const [stations, setStations] = useState<Station[]>(initialStations ?? []);
-  
+
   // Poll for real-time updates every 30 seconds
   useEffect(() => {
     const fetchRealtimeData = async () => {
@@ -581,7 +579,7 @@ export default function Dashboard({
 
     return () => clearInterval(interval);
   }, []);
-  
+
   const handleAcknowledgeAlert = async (alertId: number) => {
     try {
       const response = await fetch(`/alerts/${alertId}/acknowledge`, {
@@ -599,13 +597,13 @@ export default function Dashboard({
           )
         );
         toast.success('Alert acknowledged successfully');
-        
+
         // Update stats
         setStats(prev => ({
           ...prev,
           active_alerts: prev.active_alerts - 1,
-          critical_alerts: recentAlerts.find(a => a.id === alertId)?.severity === 'critical' 
-            ? prev.critical_alerts - 1 
+          critical_alerts: recentAlerts.find(a => a.id === alertId)?.severity === 'critical'
+            ? prev.critical_alerts - 1
             : prev.critical_alerts
         }));
       }
@@ -614,31 +612,31 @@ export default function Dashboard({
       toast.error('Failed to acknowledge alert');
     }
   };
-  
+
   // Calculate AQI status for display
   const getAQIStatus = (aqi: number) => {
     if (aqi <= 50) {
-return { text: 'Good', color: 'text-green-600' };
-}
+      return { text: 'Good', color: 'text-green-600' };
+    }
 
     if (aqi <= 100) {
-return { text: 'Moderate', color: 'text-yellow-600' };
-}
+      return { text: 'Moderate', color: 'text-yellow-600' };
+    }
 
     if (aqi <= 150) {
-return { text: 'Unhealthy for Sensitive Groups', color: 'text-orange-600' };
-}
+      return { text: 'Unhealthy for Sensitive Groups', color: 'text-orange-600' };
+    }
 
     if (aqi <= 200) {
-return { text: 'Unhealthy', color: 'text-red-600' };
-}
+      return { text: 'Unhealthy', color: 'text-red-600' };
+    }
 
     return { text: 'Very Unhealthy', color: 'text-purple-600' };
   };
-  
+
   const averageAQI = stats?.average_aqi ?? 0;
   const aqiStatus = getAQIStatus(Math.round(averageAQI));
-  
+
   return (
     <>
       <Head title="Dashboard | AGEMS" />
@@ -653,7 +651,7 @@ return { text: 'Unhealthy', color: 'text-red-600' };
               Live monitoring across the Albertine Graben region
             </p>
           </div>
-          
+
           {/* Metrics Grid */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <MetricCard
@@ -682,7 +680,7 @@ return { text: 'Unhealthy', color: 'text-red-600' };
               icon={<Activity className="h-4 w-4 text-gray-600 dark:text-gray-400" />}
             />
           </div>
-          
+
           {/* Air Quality Trend */}
           <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900/50">
             <div className="mb-3">
@@ -693,7 +691,7 @@ return { text: 'Unhealthy', color: 'text-red-600' };
             </div>
             <AQITrendChart data={airQualityTrends} />
           </div>
-          
+
           {/* Emission Trends */}
           <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900/50">
             <div className="mb-3">
@@ -704,7 +702,7 @@ return { text: 'Unhealthy', color: 'text-red-600' };
             </div>
             <EmissionTrendChart data={emissionTrends} />
           </div>
-          
+
           {/* Three-column layout for Alert Feed, Map, and Distribution */}
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
             <div className="lg:col-span-1">
@@ -714,7 +712,7 @@ return { text: 'Unhealthy', color: 'text-red-600' };
               <StationStatusMap stations={stations} />
             </div>
           </div>
-          
+
           {/* Additional Stats Row */}
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900/50">
@@ -724,7 +722,7 @@ return { text: 'Unhealthy', color: 'text-red-600' };
             <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900/50">
               <h3 className="mb-4 font-semibold text-gray-900 dark:text-gray-100">Quick Actions</h3>
               <div className="space-y-3">
-                <button 
+                <button
                   onClick={() => router.visit('/stations')}
                   className="w-full rounded-lg border border-gray-200 p-3 text-left hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800/50"
                 >
@@ -736,7 +734,7 @@ return { text: 'Unhealthy', color: 'text-red-600' };
                     <MapPin className="h-5 w-5 text-gray-400" />
                   </div>
                 </button>
-                <button 
+                <button
                   onClick={() => router.visit('/alerts')}
                   className="w-full rounded-lg border border-gray-200 p-3 text-left hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800/50"
                 >
@@ -748,7 +746,7 @@ return { text: 'Unhealthy', color: 'text-red-600' };
                     <Bell className="h-5 w-5 text-gray-400" />
                   </div>
                 </button>
-                <button 
+                <button
                   onClick={() => router.visit('/reports')}
                   className="w-full rounded-lg border border-gray-200 p-3 text-left hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800/50"
                 >

@@ -170,3 +170,59 @@ export interface PaginationLink {
     label: string;
     active: boolean;
 }
+
+// Update the User interface to include roles and permissions
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    email_verified_at: string | null;
+    password?: string;
+    remember_token?: string | null;
+    created_at: string;
+    updated_at: string;
+    last_login_at?: string | null;
+    roles?: Role[];
+    permissions?: Permission[];
+    activity?: Activity[];
+}
+
+export interface Role {
+    id: number;
+    name: string;
+    guard_name: string;
+    permissions?: Permission[];
+    created_at: string;
+    updated_at: string;
+    pivot?: {
+        model_id: number;
+        role_id: number;
+        model_type: string;
+    };
+}
+
+export interface Permission {
+    id: number;
+    name: string;
+    guard_name: string;
+    created_at: string;
+    updated_at: string;
+    pivot?: {
+        model_id: number;
+        permission_id: number;
+        model_type: string;
+    };
+}
+
+export interface Activity {
+    id: number;
+    log_name: string;
+    description: string;
+    subject_id: number | null;
+    subject_type: string | null;
+    causer_id: number | null;
+    causer_type: string | null;
+    properties: Record<string, any>;
+    created_at: string;
+    updated_at: string;
+}
