@@ -20,7 +20,7 @@ class TelemetryReadingController extends Controller
         }
         
         $readings = $query->orderBy('reading_datetime', 'desc')
-            ->paginate(20);
+            ->paginate(10);
         
         // Get statistics
         $stats = [

@@ -61,7 +61,7 @@ const TelemetryShow: React.FC<TelemetryShowProps> = ({ reading, previous, next }
     const aqiInfo = getAQILevel(reading.aqi);
 
     return (
-        <AppLayout>
+        <>
             <Head title="Telemetry Reading Details" />
 
             <div className="flex h-full flex-1 flex-col gap-6 rounded-xl p-4 md:p-6 overflow-x-auto">
@@ -290,7 +290,7 @@ const TelemetryShow: React.FC<TelemetryShowProps> = ({ reading, previous, next }
                     </CardContent>
                 </Card>
             </div>
-        </AppLayout>
+        </>
     );
 };
 
