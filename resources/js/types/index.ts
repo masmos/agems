@@ -159,6 +159,10 @@ export interface PaginatedResponse<T> {
     from: number | null;
     to: number | null;
     links: PaginationLink[];
+
+    // Laravel paginator also includes these URLs; used by telemetry index page.
+    prev_page_url: string | null;
+    next_page_url: string | null;
 }
 
 export interface PaginationLink {

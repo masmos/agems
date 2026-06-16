@@ -4,6 +4,7 @@ use App\Http\Controllers\AlertController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FlareSiteController;
 use App\Http\Controllers\MonitoringStationController;
+use App\Http\Controllers\TelemetryReadingController;
 use App\Http\Controllers\ThresholdController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -25,8 +26,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('alerts/bulk-acknowledge', [AlertController::class, 'bulkAcknowledge'])->name('alerts.bulk-acknowledge');
     Route::resource('/thresholds', ThresholdController::class);
     Route::resource('/stations', MonitoringStationController::class);
-
-    // Flare Sites Management
     Route::resource('flare-sites', FlareSiteController::class);
     Route::get('/flare-sites/{flareSite}/realtime', [FlareSiteController::class, 'getRealtimeData'])->name('flare-sites.realtime');
+    Route::resource('telemetry', TelemetryReadingController::class);
+    Route::get('/stations/{station}/readings', [TelemetryReadingController::class, 'getStationReadings'])->name('stations.readings');
 });
