@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AlertController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FlareSiteController;
 use App\Http\Controllers\MonitoringStationController;
 use App\Http\Controllers\ThresholdController;
 use Illuminate\Support\Facades\Route;
@@ -19,15 +20,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 require __DIR__.'/settings.php';
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('alerts/', [AlertController::class, 'index'])->name('alerts.index');
-    Route::get('alerts/{alert}', [AlertController::class, 'show'])->name('alerts.show');
+    Route::resource('alerts', AlertController::class);
     Route::post('alerts/{alert}/acknowledge', [AlertController::class, 'acknowledge'])->name('alerts.acknowledge');
     Route::post('alerts/bulk-acknowledge', [AlertController::class, 'bulkAcknowledge'])->name('alerts.bulk-acknowledge');
+    Route::resource('/thresholds', ThresholdController::class);
+    Route::resource('/stations', MonitoringStationController::class);
 
-    Route::get('/thresholds', [ThresholdController::class, 'index'])->name('thresholds.index');
-
-    Route::post('/thresholds', [ThresholdController::class, 'store'])->name('thresholds.store');
-
-    Route::get('/stations', [MonitoringStationController::class, 'index'])->name('stations.index');
-    Route::get('/stations/{station}', [MonitoringStationController::class, 'show'])->name('stations.show');
+    // Flare Sites Management
+    Route::resource('flare-sites', FlareSiteController::class);
+    Route::get('/flare-sites/{flareSite}/realtime', [FlareSiteController::class, 'getRealtimeData'])->name('flare-sites.realtime');
 });

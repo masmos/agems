@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { AlertCircle, BookOpen, Clock, FileWarning, FolderGit2, Gauge, LayoutGrid, LocateIcon, MapPin, TriangleAlert } from 'lucide-react';
+import { AlertCircle, BookOpen, Clock, FileWarning, Flame, FolderGit2, Gauge, LayoutGrid, LocateIcon, MapPin, TriangleAlert } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -36,6 +36,10 @@ const mainNavItems: NavItem[] = [
         title: 'Thresholds',
         icon: Gauge,
         href: '/thresholds'
+    },
+    {   title: 'Flare Sites', 
+        icon: Flame,
+        href: '/flare-sites', 
     },
     {
         title: 'Telemetry Readings',
