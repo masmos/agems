@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
 import Heading from '@/components/heading';
 import EmptyState from '@/components/shared/EmptyState';
 import { 
@@ -11,20 +10,17 @@ import {
   AlertTriangle,
   TrendingUp,
   Factory,
-  Circle,
-  Eye
+  Circle
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import FormModal from '@/components/shared/FormModal';
+import { FormInput } from '@/components/shared/form/FormInput';
+import { FormSelect } from '@/components/shared/form/FormSelect';
 import type { FlareSite, PaginatedResponse } from '@/types';
+
 
 interface FlareSitesIndexProps {
   flareSites: PaginatedResponse<FlareSite & { alerts_count: number; flare_emissions_count: number }>;
@@ -87,10 +83,79 @@ const FlareSitesIndex: React.FC<FlareSitesIndexProps> = ({ flareSites, stats }) 
             title="Flare Sites" 
             description="Monitor gas flare emissions and environmental impact across the Albertine Graben region." 
           />
-          <Button className="sm:w-auto w-full">
-            <Plus className="h-4 w-4 mr-2" />
-            Add Flare Site
-          </Button>
+
+          <FormModal
+            title="Add Flare Site"
+            description="Create a new flare site to start monitoring emissions."
+            trigger={
+              <Button className="sm:w-auto w-full">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Flare Site
+              </Button>
+            }
+            initialData={{
+              site_name: '',
+              location: '',
+              latitude: '',
+              longitude: '',
+              status: 'active',
+            }}
+            url="/flare-sites"
+            method="post"
+            submitLabel="Save Flare Site"
+            resetOnClose={true}
+          >
+            {(form: any) => (
+              <div className="grid grid-cols-1 gap-4">
+                <FormInput
+                  form={form}
+                  name="site_name"
+                  label="Site name"
+                  required
+                  placeholder="e.g. Kingfisher" 
+                />
+
+                <FormInput
+                  form={form}
+                  name="location"
+                  label="Location"
+                  required
+                  placeholder="e.g. Kasingira" 
+                />
+
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <FormInput
+                    form={form}
+                    name="latitude"
+                    label="Latitude"
+                    placeholder="-0.0000"
+                    type="number"
+                    step="any"
+                  />
+
+                  <FormInput
+                    form={form}
+                    name="longitude"
+                    label="Longitude"
+                    placeholder="30.0000"
+                    type="number"
+                    step="any"
+                  />
+                </div>
+
+                <FormSelect
+                  form={form}
+                  name="status"
+                  label="Status"
+                  required
+                  options={[
+                    { label: 'Active', value: 'active' },
+                    { label: 'Inactive', value: 'inactive' },
+                  ]}
+                />
+              </div>
+            )}
+          </FormModal>
         </div>
         
         {/* Stats Cards */}

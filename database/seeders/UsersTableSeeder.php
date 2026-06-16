@@ -20,13 +20,8 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('password'),
             ],
             [
-                'name' => 'System Administrator',
-                'email' => 'admin@example.com',
-                'password' => Hash::make('password'),
-            ],
-            [
                 'name' => 'Environmental Officer',
-                'email' => 'env_officer@example.com',
+                'email' => 'gatetegrace@gmail.com',
                 'password' => Hash::make('password'),
             ],
             [

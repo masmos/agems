@@ -43,7 +43,11 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { toast } from "sonner";
+import FormModal from '@/components/shared/FormModal';
+import { FormInput } from '@/components/shared/form/FormInput';
+import { FormSelect } from '@/components/shared/form/FormSelect';
 import type { FlareSite, FlareEmission, Alert } from '@/types';
+
 
 interface FlareSiteShowProps {
   flareSite: FlareSite & { 
@@ -127,7 +131,7 @@ const FlareSiteShow: React.FC<FlareSiteShowProps> = ({
       
       <div className="flex h-full flex-1 flex-col gap-6 rounded-xl p-4 md:p-6 overflow-x-auto">
         {/* Header with navigation */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
@@ -139,7 +143,7 @@ const FlareSiteShow: React.FC<FlareSiteShowProps> = ({
             <div>
               <div className="flex items-center gap-3">
                 <Heading 
-                  title={flareSite.site_name} 
+                  title={flareSite.site_name}
                   description={`Flare site in ${flareSite.location}`}
                 />
                 <Badge className={getStatusColor(flareSite.status)}>
@@ -153,10 +157,80 @@ const FlareSiteShow: React.FC<FlareSiteShowProps> = ({
               <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
               Refresh
             </Button>
-            <Button variant="outline">
-              <Edit className="h-4 w-4 mr-2" />
-              Edit
-            </Button>
+
+            <FormModal
+              title="Edit Flare Site"
+              description="Update site details."
+              trigger={
+                <Button variant="outline">
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit
+                </Button>
+              }
+              initialData={{
+                site_name: flareSite.site_name ?? '',
+                location: flareSite.location ?? '',
+                latitude: flareSite.latitude ?? '',
+                longitude: flareSite.longitude ?? '',
+                status: flareSite.status ?? 'active',
+              }}
+              url={`/flare-sites/${flareSite.id}`}
+              method="patch"
+              submitLabel="Save Changes"
+              resetOnClose={true}
+            >
+              {(form: any) => (
+                <div className="grid grid-cols-1 gap-4">
+                  <FormInput
+                    form={form}
+                    name="site_name"
+                    label="Site name"
+                    required
+                    placeholder="e.g. Kingfisher"
+                  />
+
+                  <FormInput
+                    form={form}
+                    name="location"
+                    label="Location"
+                    required
+                    placeholder="e.g. Kasingira"
+                  />
+
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <FormInput
+                      form={form}
+                      name="latitude"
+                      label="Latitude"
+                      placeholder="-0.0000"
+                      type="number"
+                      step="any"
+                    />
+
+                    <FormInput
+                      form={form}
+                      name="longitude"
+                      label="Longitude"
+                      placeholder="30.0000"
+                      type="number"
+                      step="any"
+                    />
+                  </div>
+
+                  <FormSelect
+                    form={form}
+                    name="status"
+                    label="Status"
+                    required
+                    options={[
+                      { label: 'Active', value: 'active' },
+                      { label: 'Inactive', value: 'inactive' },
+                    ]}
+                  />
+                </div>
+              )}
+            </FormModal>
+
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive">
