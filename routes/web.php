@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FlareSiteController;
 use App\Http\Controllers\MonitoringStationController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PipelineProjectController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TelemetryReadingController;
 use App\Http\Controllers\ThresholdController;
@@ -43,4 +44,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // Permission Management (Optional)
     Route::resource('permissions', PermissionController::class);
+
+     // Pipeline Projects
+    Route::resource('pipeline', PipelineProjectController::class);
+    Route::patch('/pipeline/{pipelineProject}/progress', [PipelineProjectController::class, 'updateProgress'])
+        ->name('pipeline.progress');
 });

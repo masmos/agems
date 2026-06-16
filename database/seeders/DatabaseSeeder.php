@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             ThresholdsTableSeeder::class,
             DemoDataSeeder::class,
             RolesTableSeeder::class,
+            PipelineProjectSeeder::class
         ]);
     }
 }

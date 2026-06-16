@@ -41,7 +41,7 @@ class UserController extends Controller
             'filters' => $request->only(['search']),
         ]);
     }
-    
+
     public function create()
     {
         $roles = Role::all();

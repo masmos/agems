@@ -49,7 +49,7 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Pipeline Projects',
         icon: FileWarning,
-        href: '/project/pipeline'
+        href: '/pipeline'
     },
     {
         title: 'Roles & Permissions',

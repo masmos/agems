@@ -226,3 +226,26 @@ export interface Activity {
     created_at: string;
     updated_at: string;
 }
+
+export interface PipelineProject {
+    id: number;
+    project_name: string;
+    description: string | null;
+    progress_percentage: number;
+    status: 'planning' | 'active' | 'in_progress' | 'paused' | 'completed' | 'cancelled';
+    start_date: string | null;
+    end_date: string | null;
+    location: string | null;
+    latitude: number | null;
+    longitude: number | null;
+    contractor: string | null;
+    budget: number | null;
+    actual_cost: number | null;
+    environmental_impact_score: number | null;
+    compliance_status: 'compliant' | 'partially_compliant' | 'non_compliant' | 'not_assessed';
+    notes: string | null;
+    created_at: string;
+    updated_at: string;
+    alerts_count?: number;
+    inspections_count?: number;
+}
