@@ -42,7 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Role Management
     Route::resource('roles', RoleController::class);
     
-    // Permission Management (Optional)
+    // Permission Management
     Route::resource('permissions', PermissionController::class);
 
      // Pipeline Projects
