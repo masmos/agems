@@ -22,7 +22,7 @@ class UserController extends Controller
             })
             ->orderBy('created_at', 'desc')
             ->paginate(15);
-        
+
         // Get statistics
         $stats = [
             'total_users' => User::count(),
@@ -30,10 +30,10 @@ class UserController extends Controller
             'new_users_this_month' => User::whereMonth('created_at', now()->month)->count(),
             'roles_count' => Role::count(),
         ];
-        
+
         // Get all roles for filter
         $roles = Role::all();
-        
+
         return Inertia::render('users/index', [
             'users' => $users,
             'stats' => $stats,
@@ -46,13 +46,13 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $permissions = Permission::all();
-        
+
         return Inertia::render('users/create', [
             'roles' => $roles,
             'permissions' => $permissions,
         ]);
     }
-    
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -64,61 +64,64 @@ class UserController extends Controller
             'permissions' => 'array',
             'permissions.*' => 'exists:permissions,id',
         ]);
-        
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'email_verified_at' => now(),
         ]);
-        
+
         // Assign roles
         if (!empty($validated['roles'])) {
             $roleNames = Role::whereIn('id', $validated['roles'])->pluck('name')->toArray();
             $user->assignRole($roleNames);
         }
-        
+
         // Assign permissions
         if (!empty($validated['permissions'])) {
             $permissionNames = Permission::whereIn('id', $validated['permissions'])->pluck('name')->toArray();
             $user->givePermissionTo($permissionNames);
         }
-        
+
         return redirect()->route('users.index')
             ->with('success', 'User created successfully.');
     }
-    
+
     public function show(User $user)
     {
         $user->load('roles', 'permissions');
-        
+
         // Get user activity
         $activity = $user->activities()
             ->orderBy('created_at', 'desc')
             ->limit(20)
             ->get();
-        
+
         return Inertia::render('users/show', [
             'user' => $user,
             'activity' => $activity,
         ]);
     }
-    
+
     public function edit(User $user)
     {
         $user->load('roles', 'permissions');
         $roles = Role::all();
-        $permissions = Permission::all();
-        
+        $permissions = Permission::all()->groupBy(function ($permission) {
+            $parts = explode('_', $permission->name);
+            return $parts[0] ?? 'other';
+        });
+
         return Inertia::render('users/edit', [
             'user' => $user,
             'roles' => $roles,
             'permissions' => $permissions,
-            'userRoleIds' => $user->roles->pluck('id'),
-            'userPermissionIds' => $user->permissions->pluck('id'),
+            'userRoleIds' => $user->roles->pluck('id')->toArray(),
+            'userPermissionIds' => $user->permissions->pluck('id')->toArray(),
         ]);
     }
-    
+
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
@@ -130,45 +133,45 @@ class UserController extends Controller
             'permissions' => 'array',
             'permissions.*' => 'exists:permissions,id',
         ]);
-        
+
         $user->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
         ]);
-        
+
         if (!empty($validated['password'])) {
             $user->update(['password' => Hash::make($validated['password'])]);
         }
-        
+
         // Sync roles
         if (isset($validated['roles'])) {
             $roleNames = Role::whereIn('id', $validated['roles'])->pluck('name')->toArray();
             $user->syncRoles($roleNames);
         }
-        
-        // Sync permissions
+
+        // Sync permissions (direct permissions)
         if (isset($validated['permissions'])) {
             $permissionNames = Permission::whereIn('id', $validated['permissions'])->pluck('name')->toArray();
             $user->syncPermissions($permissionNames);
         }
-        
+
         return redirect()->route('users.index')
             ->with('success', 'User updated successfully.');
     }
-    
+
     public function destroy(User $user)
     {
         // Prevent deleting yourself
         if ($user->id === Auth::user()->id) {
             return back()->with('error', 'You cannot delete your own account.');
         }
-        
+
         $user->delete();
-        
+
         return redirect()->route('users.index')
             ->with('success', 'User deleted successfully.');
     }
-    
+
     public function bulkAction(Request $request)
     {
         $validated = $request->validate([
@@ -176,9 +179,9 @@ class UserController extends Controller
             'user_ids.*' => 'exists:users,id',
             'action' => 'required|in:activate,deactivate,delete',
         ]);
-        
+
         $users = User::whereIn('id', $validated['user_ids']);
-        
+
         switch ($validated['action']) {
             case 'activate':
                 $users->update(['email_verified_at' => now()]);
@@ -194,7 +197,7 @@ class UserController extends Controller
                 $message = 'Users deleted successfully.';
                 break;
         }
-        
+
         return back()->with('success', $message);
     }
 }
