@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import Heading from '@/components/heading';
-import { 
-  ArrowLeft, 
+import {
+  ArrowLeft,
   MapPin,
   Calendar,
   DollarSign,
@@ -67,16 +67,17 @@ interface PipelineShowProps {
   }>;
 }
 
-const PipelineShow: React.FC<PipelineShowProps> = ({ 
-  project, 
-  inspections, 
+const PipelineShow: React.FC<PipelineShowProps> = ({
+  project,
+  inspections,
   alertStats,
-  progressHistory 
+  progressHistory
 }) => {
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  
-  const getStatusBadge = (status: string) => {
+
+  const getStatusBadge = (status: string | undefined) => {
+    if (!status) return 'bg-gray-100 text-gray-800';
     const colors: Record<string, string> = {
       planning: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
       active: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
@@ -87,8 +88,9 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
     };
     return colors[status] || 'bg-gray-100 text-gray-800';
   };
-  
-  const getComplianceBadge = (status: string) => {
+
+  const getComplianceBadge = (status: string | undefined) => {
+    if (!status) return 'bg-gray-100 text-gray-800';
     const colors: Record<string, string> = {
       compliant: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
       partially_compliant: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
@@ -97,38 +99,70 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
     };
     return colors[status] || 'bg-gray-100 text-gray-800';
   };
-  
-  const getRiskLevel = (score: number | null) => {
+
+  const getRiskLevel = (score: number | null | undefined) => {
     if (!score) return { label: 'Not Assessed', color: 'bg-gray-100 text-gray-800' };
     if (score < 30) return { label: 'Low', color: 'bg-green-100 text-green-800' };
     if (score < 60) return { label: 'Medium', color: 'bg-yellow-100 text-yellow-800' };
     if (score < 80) return { label: 'High', color: 'bg-orange-100 text-orange-800' };
     return { label: 'Critical', color: 'bg-red-100 text-red-800' };
   };
-  
+
   const handleDelete = () => {
     router.delete(`/pipeline/${project.id}`, {
       onSuccess: () => {
         toast.success("Project deleted successfully");
-       
         router.visit('/pipeline');
       },
       onError: () => {
         toast.error("Failed to delete project");
-        
       }
     });
   };
-  
-  const risk = getRiskLevel(project.environmental_impact_score);
-  const daysRemaining = project.end_date ? Math.ceil((new Date(project.end_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : null;
-  const isOverBudget = project.actual_cost && project.budget && project.actual_cost > project.budget;
-  const budgetVariance = project.budget && project.actual_cost ? project.actual_cost - project.budget : null;
-  
+
+  // Safely format status with fallback
+  const formatStatus = (status: string | undefined) => {
+    if (!status) return 'Not set';
+    return status.replace(/_/g, ' ');
+  };
+
+  // Safely format compliance status
+  const formatCompliance = (status: string | undefined) => {
+    if (!status) return 'Not assessed';
+    return status.replace(/_/g, ' ');
+  };
+
+  const risk = getRiskLevel(project?.environmental_impact_score);
+
+  // Safely calculate days remaining
+  const daysRemaining = project?.end_date
+    ? Math.ceil((new Date(project.end_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+    : null;
+
+  const isOverBudget = project?.actual_cost && project?.budget && project.actual_cost > project.budget;
+  const budgetVariance = project?.budget && project?.actual_cost ? project.actual_cost - project.budget : null;
+
+  // If project is undefined, show loading or error state
+  if (!project) {
+    return (
+      <>
+        <div className="flex items-center justify-center h-full">
+          <p className="text-muted-foreground">Project not found</p>
+        </div>
+      </>
+    );
+  }
+
+  // Add this right after the props destructuring
+  console.log('Project Data:', project);
+  console.log('Inspections:', inspections);
+  console.log('Alert Stats:', alertStats);
+  console.log('Progress History:', progressHistory);
+
   return (
-    <AppLayout>
-      <Head title={`${project.project_name} | Pipeline Project`} />
-      
+    <>
+      <Head title={`${project.project_name || 'Pipeline Project'} | Pipeline Project`} />
+
       <div className="flex h-full flex-1 flex-col gap-6 rounded-xl p-4 md:p-6 overflow-x-auto">
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -142,20 +176,20 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
             </Button>
             <div>
               <div className="flex items-center gap-3">
-                <Heading 
-                  title={project.project_name} 
+                <Heading
+                  title={project.project_name || 'Unnamed Project'}
                   description={project.location || 'Location not specified'}
                 />
                 <Badge className={getStatusBadge(project.status)}>
-                  {project.status.replace('_', ' ')}
+                  {formatStatus(project.status)}
                 </Badge>
               </div>
               <div className="mt-2 flex flex-wrap gap-2">
                 <Badge variant="outline" className={getComplianceBadge(project.compliance_status)}>
                   <Shield className="h-3 w-3 mr-1" />
-                  {project.compliance_status?.replace('_', ' ')}
+                  {formatCompliance(project.compliance_status)}
                 </Badge>
-                {project.environmental_impact_score && (
+                {project.environmental_impact_score !== null && project.environmental_impact_score !== undefined && (
                   <Badge variant="outline" className={risk.color}>
                     <AlertTriangle className="h-3 w-3 mr-1" />
                     Risk: {risk.label}
@@ -200,7 +234,7 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
             </AlertDialog>
           </div>
         </div>
-        
+
         {/* Progress Section */}
         <Card>
           <CardHeader>
@@ -211,20 +245,20 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Progress</span>
-                <span className="font-medium">{project.progress_percentage}%</span>
+                <span className="font-medium">{project.progress_percentage ?? 0}%</span>
               </div>
-              <Progress value={project.progress_percentage} className="h-3" />
+              <Progress value={project.progress_percentage ?? 0} className="h-3" />
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>Started: {project.start_date ? new Date(project.start_date).toLocaleDateString() : 'Not set'}</span>
                 <span>Expected: {project.end_date ? new Date(project.end_date).toLocaleDateString() : 'Not set'}</span>
-                {daysRemaining !== null && (
+                {daysRemaining !== null && daysRemaining !== undefined && (
                   <span>{daysRemaining > 0 ? `${daysRemaining} days remaining` : 'Completed'}</span>
                 )}
               </div>
             </div>
           </CardContent>
         </Card>
-        
+
         {/* Stats Grid */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Card>
@@ -233,26 +267,26 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
               <AlertTriangle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600">{project.alerts_count}</div>
+              <div className="text-2xl font-bold text-red-600">{project.alerts_count ?? 0}</div>
               <p className="text-xs text-muted-foreground">
                 {alertStats?.critical || 0} critical
               </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Inspections</CardTitle>
               <Eye className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{project.inspections_count}</div>
+              <div className="text-2xl font-bold">{project.inspections_count ?? 0}</div>
               <p className="text-xs text-muted-foreground">
                 Total inspections conducted
               </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Budget</CardTitle>
@@ -260,7 +294,7 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                ${project.budget?.toLocaleString() || 'N/A'}
+                {project.budget ? `$${project.budget.toLocaleString()}` : 'N/A'}
               </div>
               {isOverBudget && (
                 <p className="text-xs text-red-600 flex items-center gap-1">
@@ -276,7 +310,7 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
               )}
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Environmental Impact</CardTitle>
@@ -284,9 +318,11 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {project.environmental_impact_score || 'N/A'}
+                {project.environmental_impact_score !== null && project.environmental_impact_score !== undefined
+                  ? project.environmental_impact_score
+                  : 'N/A'}
               </div>
-              {project.environmental_impact_score && (
+              {project.environmental_impact_score !== null && project.environmental_impact_score !== undefined && (
                 <p className={`text-xs ${risk.label === 'Low' ? 'text-green-600' : risk.label === 'Medium' ? 'text-yellow-600' : risk.label === 'High' ? 'text-orange-600' : 'text-red-600'}`}>
                   Risk Level: {risk.label}
                 </p>
@@ -294,9 +330,9 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
             </CardContent>
           </Card>
         </div>
-        
+
         {/* Progress History Chart */}
-        {progressHistory.length > 0 && (
+        {progressHistory && progressHistory.length > 0 && (
           <Card>
             <CardHeader>
               <CardTitle>Progress History</CardTitle>
@@ -310,11 +346,11 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
                     <XAxis dataKey="date" />
                     <YAxis domain={[0, 100]} />
                     <Tooltip />
-                    <Area 
-                      type="monotone" 
-                      dataKey="progress" 
-                      stroke="#3b82f6" 
-                      fill="#3b82f6" 
+                    <Area
+                      type="monotone"
+                      dataKey="progress"
+                      stroke="#3b82f6"
+                      fill="#3b82f6"
                       fillOpacity={0.2}
                       name="Progress %"
                     />
@@ -324,7 +360,7 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
             </CardContent>
           </Card>
         )}
-        
+
         {/* Additional Details */}
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Project Details */}
@@ -337,11 +373,11 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Project Name</label>
-                  <p className="mt-1">{project.project_name}</p>
+                  <p className="mt-1">{project.project_name || 'N/A'}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Status</label>
-                  <p className="mt-1 capitalize">{project.status.replace('_', ' ')}</p>
+                  <p className="mt-1 capitalize">{formatStatus(project.status)}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Location</label>
@@ -361,11 +397,11 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
                 </div>
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Budget</label>
-                  <p className="mt-1">${project.budget?.toLocaleString() || 'Not set'}</p>
+                  <p className="mt-1">{project.budget ? `$${project.budget.toLocaleString()}` : 'Not set'}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Actual Cost</label>
-                  <p className="mt-1">${project.actual_cost?.toLocaleString() || 'Not recorded'}</p>
+                  <p className="mt-1">{project.actual_cost ? `$${project.actual_cost.toLocaleString()}` : 'Not recorded'}</p>
                 </div>
                 <div className="col-span-2">
                   <label className="text-sm font-medium text-muted-foreground">Description</label>
@@ -380,7 +416,7 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
               </div>
             </CardContent>
           </Card>
-          
+
           {/* Recent Inspections */}
           <Card>
             <CardHeader>
@@ -388,25 +424,25 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
               <CardDescription>Latest compliance inspections</CardDescription>
             </CardHeader>
             <CardContent>
-              {inspections.length > 0 ? (
+              {inspections && inspections.length > 0 ? (
                 <div className="space-y-4">
                   {inspections.slice(0, 5).map((inspection) => (
                     <div key={inspection.id} className="flex items-start justify-between border-b pb-3 last:border-0">
                       <div>
-                        <p className="text-sm font-medium">{inspection.location}</p>
+                        <p className="text-sm font-medium">{inspection.location || 'Unknown location'}</p>
                         <p className="text-xs text-muted-foreground">
-                          {new Date(inspection.inspection_date).toLocaleDateString()}
+                          {inspection.inspection_date ? new Date(inspection.inspection_date).toLocaleDateString() : 'Date not set'}
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">
-                          {inspection.findings?.substring(0, 100)}
+                          {inspection.findings?.substring(0, 100) || 'No findings recorded'}
                           {inspection.findings && inspection.findings.length > 100 ? '...' : ''}
                         </p>
                       </div>
                       <Badge variant={
                         inspection.status === 'compliant' ? 'default' :
-                        inspection.status === 'non_compliant' ? 'destructive' : 'secondary'
+                          inspection.status === 'non_compliant' ? 'destructive' : 'secondary'
                       }>
-                        {inspection.status}
+                        {inspection.status || 'pending'}
                       </Badge>
                     </div>
                   ))}
@@ -421,7 +457,7 @@ const PipelineShow: React.FC<PipelineShowProps> = ({
           </Card>
         </div>
       </div>
-    </AppLayout>
+    </>
   );
 };
 
