@@ -7,7 +7,6 @@ import Heading from '@/components/heading'
 import { DataTable } from '@/components/shared/DataTable'
 import EmptyState from '@/components/shared/EmptyState'
 import { Badge } from '@/components/ui/badge'
-import AppLayout from '@/layouts/app-layout'
 import type { Alert, PaginatedResponse } from '@/types'
 
 type Filters = {
@@ -40,8 +39,8 @@ export default function Alerts() {
                     severity === 'critical'
                         ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                         : severity === 'warning'
-                          ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-                          : 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400'
+                            ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+                            : 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400'
 
                 return (
                     <Badge className={badgeClass}>
@@ -73,8 +72,8 @@ export default function Alerts() {
                 const t = row.original.threshold
 
                 if (!t) {
-return <span className="text-muted-foreground">—</span>
-}
+                    return <span className="text-muted-foreground">—</span>
+                }
 
                 return (
                     <div className="leading-tight">
@@ -110,8 +109,8 @@ return <span className="text-muted-foreground">—</span>
                 const createdAt = row.original.created_at
 
                 if (!createdAt) {
-return '—'
-}
+                    return '—'
+                }
 
                 return (
                     <div>
