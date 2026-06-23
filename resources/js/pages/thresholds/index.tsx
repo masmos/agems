@@ -33,8 +33,6 @@ type PageProps = {
     }
 }
 
-
-
 export default function ThresholdsIndex() {
     const { thresholds, stats } = usePage<PageProps>().props
 
@@ -86,8 +84,8 @@ export default function ThresholdsIndex() {
                             {t.min_value !== null && t.max_value !== null
                                 ? 'Range'
                                 : t.min_value !== null
-                                  ? 'Min only'
-                                  : 'Max only'}
+                                    ? 'Min only'
+                                    : 'Max only'}
                         </div>
                     </div>
                 )
